@@ -1,0 +1,36 @@
+#!ipxe
+
+# Proxmox VE
+# https://www.proxmox.com
+
+goto ${menu} ||
+
+:proxmox
+clear proxmox_version
+set os Proxmox VE
+menu ${os}
+item --gap ${os} Versions
+item normal ${space} ${os} 7.0-1
+item debug ${space} ${os} 7.0-1 (Debug)
+choose proxmox_version || goto proxmox_exit
+goto ${proxmox_version}
+
+:normal
+set params splash=silent
+goto boot
+
+:debug
+set params splash=verbose proxdebug
+goto boot
+
+:boot
+set kernel_url ${live_endpoint}/asset-mirror/releases/download/7.0-1-24e3084c/
+imgfree
+kernel ${kernel_url}vmlinuz vga=791 video=vesafb:ywrap,mtrr ramdisk_size=16777216 rw quiet ${params} initrd=initrd.magic ${cmdline}
+initrd ${kernel_url}initrd
+initrd ${kernel_url}proxmox.iso /proxmox.iso
+boot
+
+:proxmox_exit
+clear menu
+exit 0

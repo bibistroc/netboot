@@ -1,0 +1,35 @@
+#!ipxe
+
+goto ${menu} ||
+
+:live_menu
+set os Grml
+menu ${os} - Current Arch [ ${arch} ]
+iseq ${arch} x86_64 && set arch_a amd64 || set arch_a ${arch}
+item --gap ${os} Versions
+item 2021.07-full ${space} ${os} 2021.07 full
+item 2021.07-small ${space} ${os} 2021.07 small
+choose live_version || goto live_exit
+goto ${live_version}
+
+
+:2021.07-full
+set squash_url ${live_endpoint}/debian-squash/releases/download/2021.07-5f810440/filesystem.squashfs
+set kernel_url ${live_endpoint}/debian-squash/releases/download/2021.07-5f810440/
+goto boot
+
+:2021.07-small
+set squash_url ${live_endpoint}/debian-squash/releases/download/2021.07-bacc221b/filesystem.squashfs
+set kernel_url ${live_endpoint}/debian-squash/releases/download/2021.07-bacc221b/
+goto boot
+
+
+:boot
+imgfree
+kernel ${kernel_url}vmlinuz boot=live fetch=${squash_url} initrd=initrd.magic ${cmdline}
+initrd ${kernel_url}initrd
+boot
+
+:live_exit
+clear menu
+exit 0

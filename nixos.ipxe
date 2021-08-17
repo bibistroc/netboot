@@ -1,0 +1,20 @@
+#!ipxe
+
+# NixOS
+# https://nixos.org/
+
+set os NixOS
+menu ${os}
+item --gap Official Releases
+item nixos-20.09 ${space} ${os} nixos-20.09
+item nixos-21.05 ${space} ${os} nixos-21.05
+item nixos-unstable ${space} ${os} nixos-unstable
+choose version || goto nixos_exit
+
+imgfree
+chain https://github.com/nix-community/nixos-images/releases/download/${version}/netboot-x86_64-linux.ipxe
+goto nixos_exit
+
+:nixos_exit
+clear menu
+exit 0
