@@ -1,1 +1,20 @@
-Hi !
+#!ipxe
+#<!--
+####       boot.gbarbu.eu initial loader        ####
+#### see https://netboot.xyz for more information ####
+set conn_type http
+chain --autofree http://boot.gbarbu.eu/menu.ipxe || echo HTTP failed, localbooting...
+exit
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPXE Boot</title>
+</head>
+<body>
+    <h1>Hi !</h1>
+</body>
+</html>
